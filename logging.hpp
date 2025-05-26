@@ -64,22 +64,43 @@ public:
   }
 
 private:
+  constexpr std::string_view toStringView(Level level) {
+    switch (level) {
+    case Level::Trace:
+      return "TRACE";
+    case Level::Debug:
+      return "DEBUG";
+    case Level::Info:
+      return "INFO";
+    case Level::Warn:
+      return "WARN";
+    case Level::Error:
+      return "ERROR";
+    case Level::Critical:
+      return "CRITICAL";
+    case Level::Off:
+      return "OFF";
+    default:
+      return "UNKNOWN";
+    }
+  }
+
   void write(Level level, const char *str) {
     if (level < m_level)
       return;
-    m_ofstream << str << std::endl;
+    m_ofstream << "[" << toStringView(level) << "] " << str << std::endl;
   }
 
   void write(Level level, const std::string &str) {
     if (level < m_level)
       return;
-    m_ofstream << str << std::endl;
+    m_ofstream << "[" << toStringView(level) << "] " << str << std::endl;
   }
 
   template <typename... Args> void write(Level level, std::format_string<Args...> fmt, Args &&...args) {
     if (level < m_level)
       return;
-    m_ofstream << std::format(fmt, std::forward<Args>(args)...) << std::endl;
+    m_ofstream << "[" << toStringView(level) << "] " << std::format(fmt, std::forward<Args>(args)...) << std::endl;
   }
 
   Level m_level;

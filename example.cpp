@@ -1,23 +1,14 @@
 #include "logging.hpp"
 
-#include <chrono>
-#include <cstdint>
-#include <random>
-#include <thread>
+static logging::Logger logger{logging::Level::Trace, "example.log"};
 
-static logging::Logger s_logger{logging::Level::Info, "example.log"};
-
-int main(int argc, char *argv[]) {
-  std::random_device rd;
-  std::mt19937 gen(rd());
-  std::uniform_int_distribution<int> dist(25, 100);
-
-  for (std::uint32_t i = 0; i < 100; ++i) {
-    s_logger.info("i");
-    s_logger.info("i = " + std::to_string(i));
-    s_logger.info("i = {}", i);
-    std::this_thread::sleep_for(std::chrono::milliseconds(dist(gen)));
-  }
+int main() {
+  logger.trace("function {} entered", "main");
+  logger.debug("x = {}", 42);
+  logger.info("application started, pid = {}", 1234);
+  logger.warn("config file {} not found", "settings.json");
+  logger.error("failed to connect to {}", "database");
+  logger.critical("system shutting down due to error code {}", -1);
 
   return 0;
 }
