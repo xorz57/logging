@@ -1,6 +1,5 @@
 #include "logging.hpp"
 
-#include <chrono>
 #include <thread>
 
 static logging::Logger logger{logging::Level::Trace, "factorial.log"};

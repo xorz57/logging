@@ -22,6 +22,7 @@
 
 #pragma once
 
+#include <chrono>
 #include <ctime>
 #include <format>
 #include <fstream>
