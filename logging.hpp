@@ -22,6 +22,7 @@
 
 #pragma once
 
+#include <ctime>
 #include <format>
 #include <fstream>
 #include <mutex>
