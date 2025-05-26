@@ -64,6 +64,26 @@ public:
   }
 
 private:
+  std::string getTimeStamp() {
+    auto now = std::chrono::system_clock::now();
+    auto itt = std::chrono::system_clock::to_time_t(now);
+    std::tm tm{};
+
+#ifdef _WIN32
+    localtime_s(&tm, &itt);
+#else
+    localtime_r(&itt, &tm);
+#endif
+
+    auto ms = duration_cast<std::chrono::milliseconds>(now.time_since_epoch()) % 1'000;
+
+    char buffer[24]; // YYYY-MM-DD HH:MM:SS.mmm + '\0'
+    std::snprintf(buffer, sizeof(buffer), "%04d-%02d-%02d %02d:%02d:%02d.%03d", tm.tm_year + 1900, tm.tm_mon + 1,
+                  tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec, static_cast<int>(ms.count()));
+
+    return std::string(buffer);
+  }
+
   constexpr std::string_view toStringView(Level level) {
     switch (level) {
     case Level::Trace:
@@ -88,19 +108,20 @@ private:
   void write(Level level, const char *str) {
     if (level < m_level)
       return;
-    m_ofstream << "[" << toStringView(level) << "] " << str << std::endl;
+    m_ofstream << "[" << getTimeStamp() << "] " << "[" << toStringView(level) << "] " << str << std::endl;
   }
 
   void write(Level level, const std::string &str) {
     if (level < m_level)
       return;
-    m_ofstream << "[" << toStringView(level) << "] " << str << std::endl;
+    m_ofstream << "[" << getTimeStamp() << "] " << "[" << toStringView(level) << "] " << str << std::endl;
   }
 
   template <typename... Args> void write(Level level, std::format_string<Args...> fmt, Args &&...args) {
     if (level < m_level)
       return;
-    m_ofstream << "[" << toStringView(level) << "] " << std::format(fmt, std::forward<Args>(args)...) << std::endl;
+    m_ofstream << "[" << getTimeStamp() << "] " << "[" << toStringView(level) << "] "
+               << std::format(fmt, std::forward<Args>(args)...) << std::endl;
   }
 
   Level m_level;

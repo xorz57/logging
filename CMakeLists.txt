@@ -2,5 +2,8 @@ cmake_minimum_required(VERSION 3.30)
 
 project(logging LANGUAGES CXX)
 
-add_executable(example example.cpp)
-target_compile_features(example PRIVATE cxx_std_20)
+add_executable(factorial factorial.cpp)
+target_compile_features(factorial PRIVATE cxx_std_20)
+
+add_executable(fibonacci fibonacci.cpp)
+target_compile_features(fibonacci PRIVATE cxx_std_20)
