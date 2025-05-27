@@ -25,9 +25,9 @@ std::int64_t fibonacci(std::int64_t n) {
     return 1;
   }
 
-  std::int64_t a = fibonacci(n - 1);
-  std::int64_t b = fibonacci(n - 2);
-  std::int64_t result = a + b;
+  const std::int64_t a{fibonacci(n - 1)};
+  const std::int64_t b{fibonacci(n - 2)};
+  const std::int64_t result{a + b};
 
   logger.info("fibonacci({}) = {} ({} + {})", n, result, a, b);
   return result;

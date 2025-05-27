@@ -20,8 +20,8 @@ std::uint64_t factorial(std::uint64_t n) {
     return 1;
   }
 
-  std::uint64_t prev = factorial(n - 1);
-  std::uint64_t result = n * prev;
+  const std::uint64_t prev{factorial(n - 1)};
+  const std::uint64_t result{n * prev};
 
   logger.info("factorial({}) = {} ({} * {})", n, result, n, prev);
   return result;
