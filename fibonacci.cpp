@@ -1,6 +1,7 @@
 #include "logging.hpp"
 
 #include <chrono>
+#include <string>
 #include <thread>
 
 static logging::Logger logger{logging::Level::Trace, "fibonacci.log"};
