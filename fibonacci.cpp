@@ -1,6 +1,7 @@
 #include "logging.hpp"
 
 #include <chrono>
+#include <cstdlib>
 #include <thread>
 
 static logging::Logger logger{logging::Level::Trace, "fibonacci.log"};
@@ -32,10 +33,15 @@ std::int64_t fibonacci(std::int64_t n) {
   return result;
 }
 
-int main() {
+int main(int argc, const char *argv[]) {
+  if (argc != 2)
+    return -1;
+
   logger.info("fibonacci calculation started");
 
-  for (int i = 0; i <= 10; ++i) {
+  const std::uint64_t n{std::stoull(argv[1])};
+
+  for (int i = 0; i <= n; ++i) {
     int result = fibonacci(i);
     logger.warn("fibonacci({}) computed as {}", i, result);
     std::this_thread::sleep_for(std::chrono::milliseconds(10));

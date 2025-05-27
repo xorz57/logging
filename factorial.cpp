@@ -1,5 +1,6 @@
 #include "logging.hpp"
 
+#include <cstdlib>
 #include <thread>
 
 static logging::Logger logger{logging::Level::Trace, "factorial.log"};
@@ -26,10 +27,15 @@ int factorial(int n) {
   return result;
 }
 
-int main() {
+int main(int argc, const char *argv[]) {
+  if (argc != 2)
+    return -1;
+
   logger.info("factorial calculation started");
 
-  for (int i = 0; i <= 10; ++i) {
+  const std::uint64_t n{std::stoull(argv[1])};
+
+  for (int i = 0; i <= n; ++i) {
     int result = factorial(i);
     logger.warn("factorial({}) computed as {}", i, result);
     std::this_thread::sleep_for(std::chrono::milliseconds(10));
