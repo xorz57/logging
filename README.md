@@ -1,5 +1,7 @@
 # logging
 
+[![CMake on multiple platforms](https://github.com/xorz57/logging/actions/workflows/cmake-multi-platform.yml/badge.svg)](https://github.com/xorz57/logging/actions/workflows/cmake-multi-platform.yml)
+
 A header-only C++ logging library.
 
 ## Examples
