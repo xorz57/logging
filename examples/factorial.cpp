@@ -5,7 +5,7 @@
 
 static logging::Logger logger{logging::Level::Trace, "factorial.log"};
 
-int factorial(int n) {
+std::uint64_t factorial(std::uint64_t n) {
   logger.trace("factorial({}) called", n);
 
   std::this_thread::sleep_for(std::chrono::milliseconds(10));
@@ -20,8 +20,8 @@ int factorial(int n) {
     return 1;
   }
 
-  int prev = factorial(n - 1);
-  int result = n * prev;
+  std::uint64_t prev = factorial(n - 1);
+  std::uint64_t result = n * prev;
 
   logger.info("factorial({}) = {} ({} * {})", n, result, n, prev);
   return result;
@@ -35,8 +35,8 @@ int main(int argc, const char *argv[]) {
 
   const std::uint64_t n{std::stoull(argv[1])};
 
-  for (int i = 0; i <= n; ++i) {
-    int result = factorial(i);
+  for (std::uint64_t i = 0; i <= n; ++i) {
+    std::uint64_t result = factorial(i);
     logger.warn("factorial({}) computed as {}", i, result);
     std::this_thread::sleep_for(std::chrono::milliseconds(10));
   }
