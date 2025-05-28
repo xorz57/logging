@@ -2,11 +2,11 @@ cmake_minimum_required(VERSION 3.30)
 
 project(logging LANGUAGES CXX)
 
-add_library(logging INTERFACE)
+add_library(${PROJECT_NAME} INTERFACE)
 
-target_include_directories(logging INTERFACE
-  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include/logging>
-  $<INSTALL_INTERFACE:include/logging>  # <prefix>/include/logging
+target_include_directories(${PROJECT_NAME} INTERFACE
+  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include/${PROJECT_NAME}>
+  $<INSTALL_INTERFACE:include/${PROJECT_NAME}>
 )
 
 add_subdirectory(examples)
