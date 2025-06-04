@@ -10,11 +10,6 @@ std::uint64_t factorial(std::uint64_t n) {
 
   std::this_thread::sleep_for(std::chrono::milliseconds(10));
 
-  if (n < 0) {
-    logger.error("invalid input: n < 0");
-    return -1;
-  }
-
   if (n == 0 || n == 1) {
     logger.debug("factorial({}) = 1", n);
     return 1;
