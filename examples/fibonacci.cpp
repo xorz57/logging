@@ -41,7 +41,7 @@ int main(int argc, const char *argv[]) {
 
   const std::uint64_t n{std::stoull(argv[1])};
 
-  for (int i = 0; i <= n; ++i) {
+  for (std::uint64_t i = 0; i <= n; ++i) {
     int result = fibonacci(i);
     logger.warn("fibonacci({}) computed as {}", i, result);
     std::this_thread::sleep_for(std::chrono::milliseconds(10));
