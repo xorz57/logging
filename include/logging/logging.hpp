@@ -29,7 +29,13 @@
 #include <mutex>
 
 namespace logging {
-enum class Level { Trace, Debug, Info, Warn, Error, Critical, Off };
+enum class Level { Trace,
+                   Debug,
+                   Info,
+                   Warn,
+                   Error,
+                   Critical,
+                   Off };
 
 class Logger {
 public:
@@ -63,49 +69,51 @@ public:
 
   void critical(const std::string &str) { write(Level::Critical, str); }
 
-  template <typename... Args> void trace(std::format_string<Args...> fmt, Args &&...args) {
+  template <typename... Args>
+  void trace(std::format_string<Args...> fmt, Args &&...args) {
     write(Level::Trace, fmt, std::forward<Args>(args)...);
   }
 
-  template <typename... Args> void debug(std::format_string<Args...> fmt, Args &&...args) {
+  template <typename... Args>
+  void debug(std::format_string<Args...> fmt, Args &&...args) {
     write(Level::Debug, fmt, std::forward<Args>(args)...);
   }
 
-  template <typename... Args> void info(std::format_string<Args...> fmt, Args &&...args) {
+  template <typename... Args>
+  void info(std::format_string<Args...> fmt, Args &&...args) {
     write(Level::Info, fmt, std::forward<Args>(args)...);
   }
 
-  template <typename... Args> void warn(std::format_string<Args...> fmt, Args &&...args) {
+  template <typename... Args>
+  void warn(std::format_string<Args...> fmt, Args &&...args) {
     write(Level::Warn, fmt, std::forward<Args>(args)...);
   }
 
-  template <typename... Args> void error(std::format_string<Args...> fmt, Args &&...args) {
+  template <typename... Args>
+  void error(std::format_string<Args...> fmt, Args &&...args) {
     write(Level::Error, fmt, std::forward<Args>(args)...);
   }
 
-  template <typename... Args> void critical(std::format_string<Args...> fmt, Args &&...args) {
+  template <typename... Args>
+  void critical(std::format_string<Args...> fmt, Args &&...args) {
     write(Level::Critical, fmt, std::forward<Args>(args)...);
   }
 
 private:
   std::string getTimeStamp() {
     auto now = std::chrono::system_clock::now();
-    auto itt = std::chrono::system_clock::to_time_t(now);
+    auto time_t_now = std::chrono::system_clock::to_time_t(now);
     std::tm tm{};
 
 #ifdef _WIN32
-    localtime_s(&tm, &itt);
+    localtime_s(&tm, &time_t_now);
 #else
-    localtime_r(&itt, &tm);
+    localtime_r(&time_t_now, &tm);
 #endif
 
     auto ms = duration_cast<std::chrono::milliseconds>(now.time_since_epoch()) % 1'000;
 
-    char buffer[24]; // YYYY-MM-DD HH:MM:SS.mmm + '\0'
-    std::snprintf(buffer, sizeof(buffer), "%04d-%02d-%02d %02d:%02d:%02d.%03d", tm.tm_year + 1900, tm.tm_mon + 1,
-                  tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec, static_cast<int>(ms.count()));
-
-    return std::string(buffer);
+    return std::format("{:04}-{:02}-{:02} {:02}:{:02}:{:02}.{:03}", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec, static_cast<int>(ms.count()));
   }
 
   constexpr std::string_view toStringView(Level level) {
@@ -141,7 +149,8 @@ private:
     m_ofstream << "[" << getTimeStamp() << "] " << "[" << toStringView(level) << "] " << str << std::endl;
   }
 
-  template <typename... Args> void write(Level level, std::format_string<Args...> fmt, Args &&...args) {
+  template <typename... Args>
+  void write(Level level, std::format_string<Args...> fmt, Args &&...args) {
     if (level < m_level)
       return;
     m_ofstream << "[" << getTimeStamp() << "] " << "[" << toStringView(level) << "] "
